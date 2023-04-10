@@ -1,18 +1,44 @@
-#solution-box {
-    background-color: rgb(221, 221, 221);
+body {
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+h1 {
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin: auto;
+    border-bottom: solid 1px;
+    padding: 5px;
+}
+
+#next-step-box {
+    display: flex;
+    justify-content: start;
+    width: auto;
+}
+
+#dl-button {
+    margin-left: auto;
 }
 
 .step {
     border: solid 2px;
     border-color: black;
+    border-radius: 5px;
     margin-top: 15px;
 }
 
 .step-element {
     border-right: solid 1px;
     border-color: black;
-    padding-inline: 5px;
-    margin-right: 5px;
+    min-width: 100px;
+    padding-inline: 10px;
 }
 
 .step-row {
@@ -21,7 +47,31 @@
 }
 
 .answer {
+    background-color: green;
+    color: white;
+}
+
+#input-box {
     border: solid 2px;
-    border-color: green;
-    margin-top: 15px;
+    border-radius: 3px;
+    width: 30%;
+    align-self: center;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.input-field {
+    height: 3rem;
+    margin-top: 10px;
 }

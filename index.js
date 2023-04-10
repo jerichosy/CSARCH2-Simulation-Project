@@ -227,7 +227,7 @@ function displayResults(step_by_step, maxLength) {
     initial.innerHTML =
         `
         <div class="step-row">
-            <div class="step-element negative-m"> M_n: ` + given.M_n + `</div>
+            <div class="step-element negative-m"> -M: ` + given.M_n + `</div>
             <div class="step-element">M: ` + given.M + `</div>
             <div class="step-element">A: ` + given.A + `</div>
             <div class="step-element">Q: ` + given.Q + `</div>
@@ -243,26 +243,33 @@ function displayResults(step_by_step, maxLength) {
         let step = document.createElement("DIV");
         step.setAttribute("class", "step");
         step.setAttribute("hidden", "true");
-        if (i == results.length - 1 - 1) {
-            step.setAttribute("class", "answer");
-        }
         step.innerHTML =
             `
             <h2> Step `+ ((i / 2) + 1) + ` </h2>
             <div class="step-row">
                 <div class="step-element a">A: ` + results[i].A + `</div>
                 <div class="step-element q">Q: ` + results[i].Q + `</div>
-                <div class="step-element q1">Q_1: ` + results[i].Q_1 + `</div>
+                <div class="step-element q1">Q<sub>-1</sub>: ` + results[i].Q_1 + `</div>
                 <div class="step-element msg">` + results[i].msg + `</div>
             </div>
             <div class="step-row">
-                <div class="step-element a">A: ` + results[i + 1].A + `</div>
-                <div class="step-element q">Q: ` + results[i + 1].Q + `</div>
-                <div class="step-element q1">Q_1: ` + results[i + 1].Q_1 + `</div>
+                <div class="step-element result a">A: ` + results[i + 1].A + `</div>
+                <div class="step-element result q">Q: ` + results[i + 1].Q + `</div>
+                <div class="step-element q1">Q<sub>-1</sub>: ` + results[i + 1].Q_1 + `</div>
                 <div class="step-element msg">` + results[i + 1].msg + `</div>
             </div>
 
         `
+        if (i == results.length - 1 - 1) {
+            let stepRow = step.childNodes[5];
+            let answerElements = stepRow.getElementsByClassName("result")
+            for (answer of answerElements) {
+                answer.classList.add("answer");
+            }
+
+
+
+        }
         element.appendChild(step);
     }
 
