@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSARCH2 MP | Sequential Circuit Binary Multiplier</title>
     <script src="index.js" type="text/javascript" defer></script>
+    <link rel="stylesheet" type="text/css" media="all" href="style.css" />
 </head>
 
 <body>
@@ -18,10 +19,12 @@
         <input type="number" placeholder="multiplier" id="multiplier" value="11010"></input><br>
         <input type="radio" name="input-type" value="binary" checked>Binary</button><br>
         <input type="radio" name="input-type" value="decimal">Decimal</button><br>
-        <input type="checkbox" id="step">Step-by-Step Process</button><br>
+        <input type="checkbox" id="step" checked>Step-by-Step Process</button><br>
         <button name="solve" id="solve">Solve</button><br>
-        <button>Clear</button>
+        <button id="clear">Clear</button>
     </div>
+
+    <div id="next-step-box"></div>
 
     <div id="solution-box">
 

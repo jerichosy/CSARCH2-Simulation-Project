@@ -1,18 +1,29 @@
-
-
-//let M = multiplicand
-// const M_n = 0//comp M
-// let A = "0"
-// let Q_1 = "0"
-// let Q = multiplier
-
-// to convert negative decimal to binary
-//Let binary = (decimal >>> 0).toString( redix );
-
-
 const solve = document.getElementById('solve');
+const clear = document.getElementById('clear');
+const download = document.getElementById('download');
+
+let results = []
+let given = {}
+
+clear.addEventListener("click", () => {
+    let input1 = document.getElementById('multiplicand');
+    let input2 = document.getElementById('multiplier');
+    let element = document.querySelector("#solution-box");
+    let buttons = document.querySelector("#next-step-box");
+    element.innerHTML = '';
+    buttons.innerHTML = '';
+    input1.value = '';
+    input2.value = '';
+})
 
 solve.addEventListener("click", () => {
+    // if decimal, check for  -32768 < value <= 32767
+    // if binary, check length AND check if 0 and 1 only
+    let element = document.querySelector("#solution-box");
+    let buttons = document.querySelector("#next-step-box");
+    element.innerHTML = '';
+    buttons.innerHTML = '';
+    results = []
     let M = 0
     let M_n = 0
     let Q = 0
@@ -23,14 +34,17 @@ solve.addEventListener("click", () => {
     let multiplier = document.getElementById('multiplier').value;
     const input_type = document.querySelector('input[name="input-type"]:checked').value;
     const step_by_step = document.getElementById('step').checked;
-    console.log(multiplicand, multiplier, input_type, step_by_step);
 
     if (input_type == "decimal") {
+        // if decimal, check for  -32768 < value <= 32767
+        if (multiplicand < -32768 || multiplicand > 32767) {
+            alert("Multiplicand must be between -32768 and 32767");
+            return;
+        }
+
         let absMultiplicand = convertToBinary(Math.abs(multiplicand));
         let absMultiplier = convertToBinary(Math.abs(multiplier));
         let maxLength = Math.max(absMultiplicand.length, absMultiplier.length);
-        let minLength = Math.min(absMultiplicand.length, absMultiplier.length);
-        console.log("maxLength:" + maxLength);
 
         //NEGATIVE INPUTS
         if (multiplicand < 0) { // 0101 -> 1011
@@ -56,13 +70,20 @@ solve.addEventListener("click", () => {
             multiplicand = String(multiplicand).padStart(maxLength, multiplicand[0])
         }
 
-        console.log("Binary multiplicand: " + multiplicand)
-        console.log("Binary multiplier: " + multiplier)
-
+    }
+    else {
+        // if binary, check length AND check if 0 and 1 only
+        if (multiplicand.length > 16 || multiplier.length > 16) {
+            alert("Binary inputs must be 16 bits or less");
+            return;
+        }
+        if (!isBinary(multiplicand) || !isBinary(multiplier)) {
+            alert("Binary inputs must only contain 0 and 1");
+            return;
+        }
     }
 
     let maxLength = Math.max(multiplicand.length, multiplier.length);
-    let minLength = Math.min(multiplicand.length, multiplier.length);
     if (multiplicand.length > multiplier.length) {
         M = multiplicand;
         M_n = twosComplement(M)
@@ -75,47 +96,62 @@ solve.addEventListener("click", () => {
         Q = multiplier;
         A = "0".padStart(maxLength, 0)
     }
-    console.log("M: " + M)
-    console.log("M_n: " + M_n)
-    console.log("Q: " + Q)
-    console.log("A: " + A)
+
+    given = { M_n: M_n, M: M, A: A, Q: Q, Q_1: Q_1 }
 
     for (let i = 0; i < maxLength; i++) {
         if (Q[Q.length - 1] > Q_1) {
             // 10 -> A+M_n
+            result = {
+                "A": A,
+                "Q": Q,
+                "Q_1": Q_1,
+                "msg": "A-M"
+            }
+            results.push(result);
             A = addBinary(A, M_n, maxLength)
         }
         else if (Q[Q.length - 1] < Q_1) {
             //  01 -> A+M
+            result = {
+                "A": A,
+                "Q": Q,
+                "Q_1": Q_1,
+                "msg": "A+M"
+            }
+            results.push(result);
             A = addBinary(A, M, maxLength)
         }
-
-        /*
-        Q_1: 0
-        Q: 0001
-        A: 0101
-        M: 1011
-        M_n: 0101
-    
-        0101 0001 0
-        0010 1000 1
-        */
-        //Shift Right
+        else {
+            result = {
+                "A": A,
+                "Q": Q,
+                "Q_1": Q_1,
+                "msg": "Do Nothing"
+            }
+            results.push(result);
+        }
 
         sr = shiftRight(A, Q, Q_1, maxLength);
         A = sr[0];
         Q = sr[1];
         Q_1 = sr[2];
+        result = {
+            "A": A,
+            "Q": Q,
+            "Q_1": Q_1,
+            "msg": "SAR"
+        }
+        results.push(result);
         console.log("A: " + A + " Q: " + Q + " Q_1: " + Q_1);
     }
 
+    displayResults(step_by_step, maxLength);
 });
 
 function addBinary(A, M, maxLength) {
     let num1 = parseInt(A, 2);
-    console.log(num1)
     let num2 = parseInt(M, 2);
-    console.log(num2)
     let num3 = num1 + num2;
     num3 = convertToBinary(num3);
     num3 = String(num3).padStart(maxLength, num3[0])
@@ -134,6 +170,10 @@ function shiftRight(A, Q, Q_1, maxLength) {
     let savedA = A[maxLength - 1]
     A = A.slice(0, maxLength - 1)
     A = A[0] + A
+    console.log
+    if (A == "undefined") {
+        A = savedA;
+    }
     let savedQ = Q[maxLength - 1]
     Q = Q.slice(0, maxLength - 1)
     Q = savedA + Q
@@ -173,4 +213,148 @@ function twosComplement(str) {
 
 function isBinary(input) {
     return /^[01]+$/g.test(input);
+}
+
+function displayResults(step_by_step, maxLength) {
+    let element = document.querySelector("#solution-box");
+    let initial = document.createElement("div");
+    initial.setAttribute("class", "step");
+    initial.innerHTML =
+        `
+        <div class="step-row">
+            <div class="step-element negative-m"> M_n: ` + given.M_n + `</div>
+            <div class="step-element">M: ` + given.M + `</div>
+            <div class="step-element">A: ` + given.A + `</div>
+            <div class="step-element">Q: ` + given.Q + `</div>
+            <div class="step-element1">Q_1: ` + given.Q_1 + `</div>
+        </div>
+        
+        `
+    element.appendChild(initial);
+
+
+    for (let i = 0; i < results.length - 1; i += 2) {
+
+        let step = document.createElement("DIV");
+        step.setAttribute("class", "step");
+        step.setAttribute("hidden", "true");
+        if (i == results.length - 1 - 1) {
+            step.setAttribute("class", "answer");
+        }
+        step.innerHTML =
+            `
+            <h2> Step `+ ((i / 2) + 1) + ` </h2>
+            <div class="step-row">
+                <div class="step-element a">A: ` + results[i].A + `</div>
+                <div class="step-element q">Q: ` + results[i].Q + `</div>
+                <div class="step-element q1">Q_1: ` + results[i].Q_1 + `</div>
+                <div class="step-element msg">` + results[i].msg + `</div>
+            </div>
+            <div class="step-row">
+                <div class="step-element a">A: ` + results[i + 1].A + `</div>
+                <div class="step-element q">Q: ` + results[i + 1].Q + `</div>
+                <div class="step-element q1">Q_1: ` + results[i + 1].Q_1 + `</div>
+                <div class="step-element msg">` + results[i + 1].msg + `</div>
+            </div>
+
+        `
+        element.appendChild(step);
+    }
+
+    let buttonDiv = document.getElementById('next-step-box');
+    if (step_by_step) {
+        let nextButton = document.createElement('button');
+        nextButton.setAttribute("id", "next-button");
+        nextButton.innerHTML = `Next`;
+        buttonDiv.appendChild(nextButton);
+        let i = 1;
+        let max_i = maxLength + 1;
+        console.log(maxLength)
+
+
+        nextButton.addEventListener("click", () => {
+            var nodes = document.getElementById('solution-box').childNodes;
+            nodes[i].hidden = false;
+            i++;
+            console.log(i)
+            if (i == max_i) {
+                buttonDiv.removeChild(nextButton);
+
+                let downloadButton = document.createElement('button');
+                downloadButton.setAttribute("id", "dl-button");
+                downloadButton.innerHTML = `Download results`;
+                buttonDiv.appendChild(downloadButton);
+
+                downloadButton.addEventListener("click", () => {
+                    downloadResults();
+                });
+            }
+
+
+        });
+
+
+    }
+    else {
+        var nodes = document.getElementById('solution-box').childNodes;
+        console.log(nodes);
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].hidden = false;
+        }
+
+        let downloadButton = document.createElement('button');
+        downloadButton.setAttribute("id", "dl-button");
+        downloadButton.innerHTML = `Download results`;
+        buttonDiv.appendChild(downloadButton);
+
+        downloadButton.addEventListener("click", () => {
+            downloadResults();
+        });
+    }
+
+    // else {
+    //     let nextButton = element.createElement("button");
+    //     let i = 0;
+    //     nextButton.setAttribute("id", "next");
+
+    //     nextButton.addEventListener("click", () => {
+
+    //     });
+    // }
+
+    // results.forEach(function (result) {
+    //     console.log(result);
+    //     let step = document.createElement("DIV");
+    //     step.innerHTML =
+    //         `
+    //     <div class="step">
+    //         <div class="step-element a">A: ` + result.A + `</div>
+    //         <div class="step-element q">Q: ` + result.Q + `</div>
+    //         <div class="step-element q1">Q_1: ` + result.Q_1 + `</div>
+    //         <div class="step-element msg">` + result.msg + `</div>
+    //     </div>
+    //     `
+    //     element.appendChild(step);
+    // }
+
+
+
+}
+
+
+
+function downloadResults() {
+    let textFileContent = `-M: ${given.M_n}\n M: ${given.M}\n A: ${given.A}  Q: ${given.Q}  Q-1: ${given.Q_1}\n\n`
+
+    step = 0
+    for (let i = 0; i < results.length; i += 2) {
+        step++
+        textFileContent += `Step ${step}:\n A: ${results[i].A}  Q: ${results[i].Q}  Q-1: ${results[i].Q_1}  ${results[i].msg}\n A: ${results[i + 1].A}  Q: ${results[i + 1].Q}  Q-1: ${results[i + 1].Q_1}  ${results[i + 1].msg}\n\n`
+    }
+
+    const textFileBlob = new Blob([textFileContent], { type: 'text/plain' });
+    const anchor = document.createElement('a');
+    anchor.href = URL.createObjectURL(textFileBlob);
+    anchor.download = "results.txt";
+    anchor.click();
 }
