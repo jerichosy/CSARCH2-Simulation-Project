@@ -11,8 +11,6 @@
 </head>
 
 <body>
-
-
     <h1>Sequential Circuit Binary Multiplier</h1>
     <div id="input-box">
         <div class="fields">
@@ -20,27 +18,26 @@
             <input type="number" placeholder="Multiplier" id="multiplier" class="input-field"></input>
         </div>
 
-        <div class="input-type-radio">
-            <input type="radio" name="input-type" value="binary" checked>Binary</button>
-            <input type="radio" name="input-type" value="decimal">Decimal</button>
-        </div>
+        <div class="option-group">
+            <div class="input-type-radio">
+                <input type="radio" name="input-type" value="binary" checked><label>Binary</label>
+                <input type="radio" name="input-type" value="decimal"><label>Decimal</label>
+            </div>
 
-        <div class="sbs-checkbox">
-            <input type="checkbox" id="step">Step-by-Step Process</input>
+            <div class="sbs-checkbox">
+                <input type="checkbox" id="step"><label for="step">Step-by-Step Process</label>
+            </div>
         </div>
-
 
         <div class="buttons">
             <button name="solve" id="solve">Solve</button>
             <button id="clear">Clear</button>
         </div>
-
     </div>
 
     <div id="next-step-box"></div>
 
     <div id="solution-box">
-
     </div>
 
 </body>
