@@ -17,8 +17,6 @@ clear.addEventListener("click", () => {
 })
 
 solve.addEventListener("click", () => {
-    // if decimal, check for  -32768 < value <= 32767
-    // if binary, check length AND check if 0 and 1 only
     let element = document.querySelector("#solution-box");
     let buttons = document.querySelector("#next-step-box");
     element.innerHTML = '';
@@ -35,8 +33,10 @@ solve.addEventListener("click", () => {
     const input_type = document.querySelector('input[name="input-type"]:checked').value;
     const step_by_step = document.getElementById('step').checked;
 
+    console.log(multiplicand, multiplier, input_type, step_by_step)
+
     if (input_type == "decimal") {
-        // if decimal, check for  -32768 < value <= 32767
+        // if decimal, check for beyond 16-bit signed integer range
         if (multiplicand < -32768 || multiplicand > 32767) {
             alert("Multiplicand must be between -32768 and 32767");
             return;
@@ -311,34 +311,6 @@ function displayResults(step_by_step, maxLength) {
             downloadResults();
         });
     }
-
-    // else {
-    //     let nextButton = element.createElement("button");
-    //     let i = 0;
-    //     nextButton.setAttribute("id", "next");
-
-    //     nextButton.addEventListener("click", () => {
-
-    //     });
-    // }
-
-    // results.forEach(function (result) {
-    //     console.log(result);
-    //     let step = document.createElement("DIV");
-    //     step.innerHTML =
-    //         `
-    //     <div class="step">
-    //         <div class="step-element a">A: ` + result.A + `</div>
-    //         <div class="step-element q">Q: ` + result.Q + `</div>
-    //         <div class="step-element q1">Q_1: ` + result.Q_1 + `</div>
-    //         <div class="step-element msg">` + result.msg + `</div>
-    //     </div>
-    //     `
-    //     element.appendChild(step);
-    // }
-
-
-
 }
 
 
