@@ -107,6 +107,7 @@ solve.addEventListener("click", () => {
     for (let i = 0; i < maxLength; i++) {
         if (Q[Q.length - 1] > Q_1) {
             // 10 -> A+M_n
+            A = addBinary(A, M_n, maxLength)
             result = {
                 "A": A,
                 "Q": Q,
@@ -114,10 +115,10 @@ solve.addEventListener("click", () => {
                 "msg": "A-M"
             }
             results.push(result);
-            A = addBinary(A, M_n, maxLength)
         }
         else if (Q[Q.length - 1] < Q_1) {
             //  01 -> A+M
+            A = addBinary(A, M, maxLength)
             result = {
                 "A": A,
                 "Q": Q,
@@ -125,7 +126,6 @@ solve.addEventListener("click", () => {
                 "msg": "A+M"
             }
             results.push(result);
-            A = addBinary(A, M, maxLength)
         }
         else {
             result = {
