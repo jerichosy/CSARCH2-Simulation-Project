@@ -41,6 +41,11 @@ solve.addEventListener("click", () => {
             alert("Multiplicand must be between -32768 and 32767");
             return;
         }
+        // validate not empty field
+        if (multiplier == "" || multiplier == "") {
+            alert("Please enter multiplicand and multiplier");
+            return;
+        }
 
         let absMultiplicand = convertToBinary(Math.abs(multiplicand));
         let absMultiplier = convertToBinary(Math.abs(multiplier));
