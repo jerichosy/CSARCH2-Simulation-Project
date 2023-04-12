@@ -1,7 +1,7 @@
 # CSARCH2-Simulation-Project
 Sequential Circuit Binary Multiplier simulator
 
-https://jerichosy.github.io/CSARCH2-Simulation-Project/
+Web Application Link: https://jerichosy.github.io/CSARCH2-Simulation-Project/
 
 ## How to Use The Web App
 1. Select either the Binary or Decimal modes.
