@@ -37,12 +37,12 @@ solve.addEventListener("click", () => {
 
     if (input_type == "decimal") {
         // if decimal, check for beyond 16-bit signed integer range
-        if (multiplicand < -32768 || multiplicand > 32767) {
-            alert("Multiplicand must be between -32768 and 32767");
+        if (multiplicand < -32768 || multiplicand > 32767 || multiplier < -32768 || multiplier > 32767) {
+            alert("Multiplicand and multiplier must be between -32768 and 32767");
             return;
         }
         // validate not empty field
-        if (multiplier == "" || multiplier == "") {
+        if (multiplicand == "" || multiplier == "") {
             alert("Please enter multiplicand and multiplier");
             return;
         }
